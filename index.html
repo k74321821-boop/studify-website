@@ -5,423 +5,290 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Studify</title>
 
+<!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <style>
-:root{
---bg:#0a0a0a;
---card:#1a1a1a;
---hover:#252525;
---text:#ffffff;
---sub:#a0a0a0;
---yellow:#ffd700;
---border:#333;
+:root {
+  --bg:#0a0a0a; --card:#1a1a1a; --hover:#252525; --text:#fff; --sub:#a0a0a0; --yellow:#ffd700; --border:#333;
 }
-
-*{box-sizing:border-box;margin:0;padding:0}
-
-body{
-font-family:system-ui;
-background:var(--bg);
-color:var(--text);
-padding-bottom:90px
-}
-
-.header{
-position:sticky;
-top:0;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:16px 20px;
-background:var(--card);
-border-bottom:1px solid var(--border);
-z-index:10
-}
-
-.logo{font-weight:800;font-size:22px;display:flex;gap:8px;align-items:center}
-
-.logo-icon{
-background:var(--yellow);
-color:black;
-width:34px;height:34px;border-radius:8px;
-display:flex;align-items:center;justify-content:center
-}
-
-.container{max-width:720px;margin:auto;padding:20px}
-
-.section{margin-bottom:30px}
-.section-title{font-weight:700;margin-bottom:10px}
-
-.card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:14px;
-padding:18px
-}
-
-.friend-add{
-padding:16px;border:2px dashed var(--border);
-border-radius:12px;text-align:center;color:var(--sub);cursor:pointer
-}
-.friend-add:hover{border-color:var(--yellow);color:var(--yellow)}
-
-.friend{
-padding:10px;background:var(--hover);border-radius:10px;margin-top:8px;
-display:flex;justify-content:space-between
-}
-
-.task{
-display:flex;align-items:center;gap:10px;background:var(--hover);
-padding:12px;border-radius:10px;margin-top:8px
-}
-
-.checkbox{width:20px;height:20px;border:2px solid var(--border);border-radius:6px;cursor:pointer}
-.task-title{flex:1}
-
-.timer{text-align:center}
-
-.time{
-font-size:56px;color:var(--yellow);font-weight:800;margin:10px 0
-}
-
-button{cursor:pointer}
-
-.btn{
-background:var(--yellow);border:none;padding:12px 18px;border-radius:10px;font-weight:600
-}
-
-.btn-secondary{background:var(--hover);color:white}
-
-.timer-buttons{display:flex;gap:10px;justify-content:center;margin-top:10px}
-
-.rooms{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-
-.room{
-background:var(--card);border:1px solid var(--border);
-border-radius:12px;padding:16px;text-align:center;cursor:pointer
-}
-.room:hover{border-color:var(--yellow)}
-
-.nav{
-position:fixed;bottom:0;left:0;right:0;background:var(--card);
-display:flex;border-top:1px solid var(--border)
-}
-
-.nav-item{flex:1;text-align:center;padding:10px;color:var(--sub);cursor:pointer}
-.nav-item.active{color:var(--yellow)}
-
-#map{
-position:fixed;
-top:60px;
-left:0;
-width:100%;
-height:calc(100vh - 60px);
-}
-
-.profile input{
-width:100%;margin-top:6px;margin-bottom:10px;padding:10px;border-radius:8px;
-border:1px solid var(--border);background:var(--hover);color:white
-}
-
-.streak{font-size:20px;font-weight:700;color:var(--yellow);margin-top:6px}
-
-.stats{display:flex;gap:10px;margin-top:10px}
-
-.stat{
-flex:1;background:var(--hover);padding:10px;border-radius:10px;text-align:center
-}
-
-.music-player{margin-top:10px}
-
-.leaderboard-item{
-background:var(--hover);
-padding:10px;border-radius:10px;margin-top:6px;
-display:flex;justify-content:space-between
-}
-
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:system-ui;background:var(--bg);color:var(--text);padding-bottom:90px;}
+.header{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:var(--card);border-bottom:1px solid var(--border);z-index:10;}
+.logo{font-weight:800;font-size:22px;display:flex;gap:8px;align-items:center;}
+.logo-icon{background:var(--yellow);color:black;width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.container{max-width:720px;margin:auto;padding:20px;}
+.section{margin-bottom:30px;}
+.section-title{font-weight:700;margin-bottom:10px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;}
+.friend-add{padding:16px;border:2px dashed var(--border);border-radius:12px;text-align:center;color:var(--sub);cursor:pointer;transition:.2s;}
+.friend-add:hover{border-color:var(--yellow);color:var(--yellow);}
+.friend{padding:10px;background:var(--hover);border-radius:10px;margin-top:8px;display:flex;justify-content:space-between;align-items:center;}
+.task{display:flex;align-items:center;gap:10px;background:var(--hover);padding:12px;border-radius:10px;margin-top:8px;}
+.checkbox{width:20px;height:20px;border:2px solid var(--border);border-radius:6px;cursor:pointer;}
+.task-title{flex:1;}
+input{width:100%;margin-top:6px;margin-bottom:10px;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--hover);color:white;}
+.timer{text-align:center;}
+.time{font-size:56px;color:var(--yellow);font-weight:800;margin:10px 0;}
+button{cursor:pointer;}
+.btn{background:var(--yellow);border:none;padding:12px 18px;border-radius:10px;font-weight:600;transition:.2s;}
+.btn:hover{opacity:.85;}
+.btn-secondary{background:var(--hover);color:white;}
+.timer-buttons{display:flex;gap:10px;justify-content:center;margin-top:10px;}
+.rooms{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.room{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:.2s;}
+.room:hover{border-color:var(--yellow);}
+.nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;border-top:1px solid var(--border);}
+.nav-item{flex:1;text-align:center;padding:10px;color:var(--sub);cursor:pointer;}
+.nav-item.active{color:var(--yellow);}
+#map{position:fixed;top:60px;left:0;width:100%;height:calc(100vh - 60px);}
+.streak{font-size:20px;font-weight:700;color:var(--yellow);margin-top:6px;}
+.stats{display:flex;gap:10px;margin-top:10px;}
+.stat{flex:1;background:var(--hover);padding:10px;border-radius:10px;text-align:center;}
+.music-player{margin-top:10px;}
+.leaderboard-item{background:var(--hover);padding:10px;border-radius:10px;margin-top:6px;display:flex;justify-content:space-between;}
+.profile input{margin-bottom:10px;}
 </style>
 </head>
 <body>
 
 <div class="header">
-<div class="logo"><div class="logo-icon">📚</div>Studify</div>
-<div id="profileName">DU</div>
+  <div class="logo"><div class="logo-icon">📚</div>Studify</div>
+  <div id="profileName">DU</div>
 </div>
 
 <div class="container">
+  <!-- HOME -->
+  <div class="section" id="home">
+    <div class="section-title">Freunde</div>
+    <div class="card">
+      <div class="friend-add" onclick="inviteFriends()">➕ Freunde hinzufügen / Link kopieren</div>
+      <div id="friends"></div>
+    </div>
 
-<!-- HOME -->
-<div class="section" id="home">
-<div class="section-title">Freunde</div>
-<div class="card">
-<div class="friend-add" onclick="inviteFriends()">➕ Freunde hinzufügen / Einladungslink kopieren</div>
-<div id="friends"></div>
-</div>
+    <div class="section-title" style="margin-top:20px">Study Streak</div>
+    <div class="card">
+      <div>Deine Lernserie</div>
+      <div class="streak" id="streak">🔥 0 Tage</div>
+      <div class="stats">
+        <div class="stat">Tasks<br><span id="statTasks">0</span></div>
+        <div class="stat">Sessions<br><span id="statSessions">0</span></div>
+      </div>
+    </div>
 
-<div class="section-title" style="margin-top:20px">Study Streak</div>
-<div class="card">
-<div>Deine Lernserie</div>
-<div class="streak" id="streak">🔥 0 Tage</div>
+    <div class="section-title" style="margin-top:20px">Leaderboard</div>
+    <div class="card" id="leaderboard"></div>
+  </div>
 
-<div class="stats">
-<div class="stat">Tasks<br><span id="statTasks">0</span></div>
-<div class="stat">Sessions<br><span id="statSessions">0</span></div>
-</div>
-</div>
+  <!-- TIMER -->
+  <div class="section" id="timerSection" style="display:none">
+    <div class="section-title">Focus Timer</div>
+    <div class="card timer">
+      <div class="time" id="time">25:00</div>
+      <div class="timer-buttons">
+        <button class="btn" onclick="toggleTimer()">Start</button>
+        <button class="btn btn-secondary" onclick="resetTimer()">Reset</button>
+      </div>
+      <div class="music-player">
+        <select id="musicSelect">
+          <option value="">🎵 Focus Musik</option>
+          <option value="https://www.youtube.com/embed/jfKfPfyJRdk">LoFi Stream</option>
+          <option value="https://www.youtube.com/embed/5qap5aO4i9A">LoFi Beats</option>
+        </select>
+        <div id="musicFrame" style="margin-top:10px"></div>
+      </div>
+    </div>
+  </div>
 
-<div class="section-title" style="margin-top:20px">Leaderboard</div>
-<div class="card" id="leaderboard"></div>
-</div>
+  <!-- TASKS -->
+  <div class="section" id="tasks" style="display:none">
+    <div class="section-title">Aufgaben</div>
+    <div class="card">
+      <input id="taskInput" placeholder="Neue Aufgabe...">
+      <button class="btn" onclick="addTask()">Hinzufügen</button>
+      <div id="taskList"></div>
+    </div>
+  </div>
 
-<!-- TIMER -->
-<div class="section" id="timerSection" style="display:none">
-<div class="section-title">Focus Timer</div>
-<div class="card timer">
-<div class="time" id="time">25:00</div>
-<div class="timer-buttons">
-<button class="btn" onclick="toggleTimer()">Start</button>
-<button class="btn btn-secondary" onclick="resetTimer()">Reset</button>
-</div>
+  <!-- ROOMS -->
+  <div class="section" id="rooms" style="display:none">
+    <div class="section-title">Study Groups</div>
+    <div class="rooms" id="groupList">
+      <div class="room" onclick="joinGroup()">👥 Gruppe beitreten</div>
+      <div class="room" onclick="createGroup()">➕ Gruppe erstellen</div>
+    </div>
+  </div>
 
-<div class="music-player">
-<select id="musicSelect" style="width:100%;padding:10px;border-radius:8px;background:var(--hover);color:white;border:1px solid var(--border)">
-<option value="">🎵 Focus Musik</option>
-<option value="https://www.youtube.com/embed/jfKfPfyJRdk">LoFi Stream</option>
-<option value="https://www.youtube.com/embed/5qap5aO4i9A">LoFi Beats</option>
-</select>
-<div id="musicFrame" style="margin-top:10px"></div>
-</div>
-</div>
-</div>
+  <!-- MAP -->
+  <div class="section" id="mapSection" style="display:none">
+    <div class="section-title">Freunde Karte</div>
+    <div id="map"></div>
+  </div>
 
-<!-- TASKS -->
-<div class="section" id="tasks" style="display:none">
-<div class="section-title">Aufgaben</div>
-<div class="card">
-<input id="taskInput" placeholder="Neue Aufgabe..." style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--hover);color:white">
-<button class="btn" style="margin-top:10px" onclick="addTask()">Hinzufügen</button>
-<div id="taskList"></div>
-</div>
-</div>
-
-<!-- ROOMS -->
-<div class="section" id="rooms" style="display:none">
-<div class="section-title">Study Groups</div>
-<div class="rooms" id="groupList">
-<div class="room" onclick="joinGroup()">👥 Gruppe beitreten</div>
-<div class="room" onclick="createGroup()">➕ Gruppe erstellen</div>
-</div>
-</div>
-
-<!-- MAP -->
-<div class="section" id="mapSection" style="display:none">
-<div class="section-title">Freunde Karte</div>
-<div id="map"></div>
-</div>
-
-<!-- PROFILE -->
-<div class="section profile" id="profile" style="display:none">
-<div class="section-title">Profil</div>
-<div class="card">
-Name
-<input id="nameInput" placeholder="Dein Name">
-Schule
-<input id="schoolInput" placeholder="Deine Schule">
-<button class="btn" onclick="saveProfile()">Speichern</button>
-</div>
-</div>
-
+  <!-- PROFILE -->
+  <div class="section profile" id="profile" style="display:none">
+    <div class="section-title">Profil</div>
+    <div class="card">
+      Name
+      <input id="nameInput" placeholder="Dein Name">
+      Schule
+      <input id="schoolInput" placeholder="Deine Schule">
+      <button class="btn" onclick="saveProfile()">Speichern</button>
+      <button class="btn btn-secondary" onclick="setMyLocation()">📍 Mein Standort setzen</button>
+    </div>
+  </div>
 </div>
 
+<!-- NAV -->
 <div class="nav">
-<div class="nav-item active" onclick="showPage('home',this)">🏠</div>
-<div class="nav-item" onclick="showPage('timerSection',this)">⏱</div>
-<div class="nav-item" onclick="showPage('tasks',this)">✅</div>
-<div class="nav-item" onclick="showPage('rooms',this)">👥</div>
-<div class="nav-item" onclick="showPage('mapSection',this);initMap()">🌍</div>
-<div class="nav-item" onclick="showPage('profile',this)">👤</div>
+  <div class="nav-item active" onclick="showPage('home',this)">🏠</div>
+  <div class="nav-item" onclick="showPage('timerSection',this)">⏱</div>
+  <div class="nav-item" onclick="showPage('tasks',this)">✅</div>
+  <div class="nav-item" onclick="showPage('rooms',this)">👥</div>
+  <div class="nav-item" onclick="showPage('mapSection',this);initMap()">🌍</div>
+  <div class="nav-item" onclick="showPage('profile',this)">👤</div>
 </div>
 
 <script>
-let time=1500
-let running=false
-let interval
+// ====================
+// GLOBAL VARIABLES
+// ====================
+let time=1500, running=false, interval, map, markers=[];
 
-function updateTimer(){
-let m=Math.floor(time/60)
-let s=time%60
-document.getElementById("time").textContent=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`
-}
+// ====================
+// TIMER FUNCTIONS
+// ====================
+function updateTimer(){ let m=Math.floor(time/60), s=time%60; document.getElementById("time").textContent=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
+function toggleTimer(){ const btn=document.querySelector("#timerSection .timer-buttons .btn"); if(running){ clearInterval(interval); running=false; btn.textContent="Weiter"; } else{ interval=setInterval(()=>{if(time>0){time--;updateTimer();}},1000); running=true; btn.textContent="Pause"; } }
+function resetTimer(){ time=1500; updateTimer(); clearInterval(interval); running=false; let sessions=parseInt(localStorage.getItem("studify_sessions")||0)+1; localStorage.setItem("studify_sessions",sessions); loadStats(); }
 
-function toggleTimer(){
-  const btn = document.querySelector("#timerSection .timer-buttons .btn");
-  if(running){
-    clearInterval(interval);
-    running=false;
-    btn.textContent = "Weiter";  // Button zeigt Weiter, wenn pausiert
-  } else {
-    interval=setInterval(()=>{
-      if(time>0){ time--; updateTimer(); }
-    },1000);
-    running=true;
-    btn.textContent = "Pause"; // Button zeigt Pause, wenn läuft}
-  }
-}
+// ====================
+// TASK FUNCTIONS
+// ====================
+function addTask(){ let t=document.getElementById("taskInput").value.trim(); if(!t) return; let tasks=JSON.parse(localStorage.getItem("studify_tasks")||"[]"); tasks.push(t); localStorage.setItem("studify_tasks",JSON.stringify(tasks)); document.getElementById("taskInput").value=""; loadTasks(); }
+function loadTasks(){ let list=document.getElementById("taskList"); list.innerHTML=""; let tasks=JSON.parse(localStorage.getItem("studify_tasks")||"[]"); tasks.forEach((task,i)=>{ let div=document.createElement("div"); div.className="task"; let box=document.createElement("div"); box.className="checkbox"; box.onclick=()=>{tasks.splice(i,1); localStorage.setItem("studify_tasks",JSON.stringify(tasks)); loadTasks();}; let title=document.createElement("div"); title.className="task-title"; title.textContent=task; div.appendChild(box); div.appendChild(title); list.appendChild(div); }); loadStats(); }
 
+// ====================
+// STREAK FUNCTIONS
+// ====================
+function increaseStreak(){ const today=new Date().toDateString(); const last=localStorage.getItem("lastStudy"); let streak=parseInt(localStorage.getItem("studify_streak")||0); if(!last){ streak=1; localStorage.setItem("lastStudy",today); } else{ const diff=Math.round((new Date(today)-new Date(last))/(1000*60*60*24)); if(diff===1) streak++; else if(diff>1) streak=1; localStorage.setItem("lastStudy",today); } localStorage.setItem("studify_streak",streak); document.getElementById("streak").textContent=`🔥 ${streak} Tage`; }
 
+// ====================
+// STATS FUNCTIONS
+// ====================
+function loadStats(){ let tasks=JSON.parse(localStorage.getItem("studify_tasks")||"[]"); let sessions=parseInt(localStorage.getItem("studify_sessions")||0); document.getElementById("statTasks").textContent=tasks.length; document.getElementById("statSessions").textContent=sessions; }
 
-function resetTimer(){
-time=1500
-updateTimer()
-clearInterval(interval)
-running=false
+// ====================
+// PROFILE FUNCTIONS
+// ====================
+function saveProfile(){ let name=document.getElementById("nameInput").value.trim(); let school=document.getElementById("schoolInput").value.trim(); localStorage.setItem("studify_name",name); localStorage.setItem("studify_school",school); document.getElementById("profileName").textContent=name||"DU"; alert("Profil gespeichert!"); }
 
-let sessions=localStorage.getItem("studify_sessions")||0
-sessions++
-localStorage.setItem("studify_sessions",sessions)
-loadStats()
-}
-
-function addTask(){
-let text=document.getElementById("taskInput").value
-if(!text)return
-let tasks=JSON.parse(localStorage.getItem("studify_tasks")||"[]")
-tasks.push(text)
-localStorage.setItem("studify_tasks",JSON.stringify(tasks))
-document.getElementById("taskInput").value=""
-loadTasks()
-}
-
-function loadTasks(){
-let list=document.getElementById("taskList")
-list.innerHTML=""
-let tasks=JSON.parse(localStorage.getItem("studify_tasks")||"[]")
-tasks.forEach((task,i)=>{
-let div=document.createElement("div"); div.className="task"
-let box=document.createElement("div"); box.className="checkbox"
-box.onclick=()=>{tasks.splice(i,1); localStorage.setItem("studify_tasks",JSON.stringify(tasks)); loadTasks()}
-let title=document.createElement("div"); title.className="task-title"; title.textContent=task
-div.appendChild(box); div.appendChild(title)
-list.appendChild(div)
-})
-loadStats()
-}
-
-function increaseStreak(){
-const today=new Date().toDateString()
-const lastStudy=localStorage.getItem("lastStudy")
-let streak=parseInt(localStorage.getItem("studify_streak")||0)
-if(!lastStudy){
-streak=1
-localStorage.setItem("lastStudy",today)
-}else{
-const diff=(new Date(today)-new Date(lastStudy))/(1000*60*60*24)
-if(diff===1) streak++
-if(diff>1) streak=1
-localStorage.setItem("lastStudy",today)
-}
-localStorage.setItem("studify_streak",streak)
-document.getElementById("streak").textContent=`🔥 ${streak} Tage`
-}
-
-function loadStats(){
-let tasks=JSON.parse(localStorage.getItem("studify_tasks")||"[]")
-let sessions=localStorage.getItem("studify_sessions")||0
-document.getElementById("statTasks").textContent=tasks.length
-document.getElementById("statSessions").textContent=sessions
-}
-
-function saveProfile(){
-let name=document.getElementById("nameInput").value
-let school=document.getElementById("schoolInput").value
-localStorage.setItem("studify_name",name)
-localStorage.setItem("studify_school",school)
-document.getElementById("profileName").textContent=name||"DU"
-alert("Profil gespeichert")
-}
-
+// ====================
+// FRIENDS & MAP FUNCTIONS
+// ====================
 function inviteFriends(){
-const link=window.location.href
-navigator.clipboard.writeText(link)
-alert("Einladungslink kopiert!")
+  let friends=JSON.parse(localStorage.getItem("studify_friends")||"[]");
+  let name=localStorage.getItem("studify_name")||"DU";
+  let link=window.location.href+"?friend="+encodeURIComponent(name);
+  navigator.clipboard.writeText(link); alert("Einladungslink kopiert!");
+  // Prüfen, ob Link geöffnet
+  let params=new URLSearchParams(window.location.search);
+  if(params.has("friend")){
+    let fName=params.get("friend");
+    if(!friends.some(f=>f.name===fName)) friends.push({name:fName,score:0,lat:null,lng:null});
+    localStorage.setItem("studify_friends",JSON.stringify(friends));
+  }
+  loadFriends(); loadLeaderboard(); updateMapMarkers();
 }
 
-function joinGroup(){
-let link=prompt("Gruppenlink eingeben")
-if(link)window.open(link,"_blank")
+function loadFriends(){ 
+  let list=document.getElementById("friends"); list.innerHTML=""; 
+  let friends=JSON.parse(localStorage.getItem("studify_friends")||"[]"); 
+  friends.forEach(f=>{ let div=document.createElement("div"); div.className="friend"; div.innerHTML=`${f.name} <button class="btn btn-secondary" onclick="setFriendLocation('${f.name}')">📍 Standort setzen</button>`; list.appendChild(div); }); 
+  updateMapMarkers(); 
 }
 
-function createGroup(){
-let name=prompt("Gruppenname")
-let link=prompt("Chat Link")
-if(!name||!link)return
-let div=document.createElement("div")
-div.className="room"
-div.textContent=name
-div.onclick=()=>window.open(link,"_blank")
-document.getElementById("groupList").appendChild(div)
+function setMyLocation(){
+  if(!navigator.geolocation){ alert("Geolocation wird nicht unterstützt"); return;}
+  navigator.geolocation.getCurrentPosition(pos=>{
+    let friends=JSON.parse(localStorage.getItem("studify_friends")||"[]");
+    let me=localStorage.getItem("studify_name")||"DU";
+    let f=friends.find(x=>x.name===me);
+    if(!f){ f={name:me,score:parseInt(localStorage.getItem("studify_streak")||0)}; friends.push(f);}
+    f.lat=pos.coords.latitude; f.lng=pos.coords.longitude;
+    localStorage.setItem("studify_friends",JSON.stringify(friends));
+    updateMapMarkers(); alert("Standort gespeichert!");
+  });
 }
 
-let map
-function initMap(){if(map)return; map=L.map('map').setView([51,10],4); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)}
-
-function showPage(id,el){
-document.querySelectorAll(".section").forEach(s=>s.style.display="none")
-document.getElementById(id).style.display="block"
-document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"))
-el.classList.add("active")
+function setFriendLocation(name){
+  if(!navigator.geolocation){ alert("Geolocation wird nicht unterstützt"); return;}
+  navigator.geolocation.getCurrentPosition(pos=>{
+    let friends=JSON.parse(localStorage.getItem("studify_friends")||"[]");
+    let f=friends.find(x=>x.name===name);
+    if(f){ f.lat=pos.coords.latitude; f.lng=pos.coords.longitude; localStorage.setItem("studify_friends",JSON.stringify(friends)); updateMapMarkers(); alert(name+"'s Standort gespeichert!"); }
+  });
 }
 
-/* leaderboard nur echte Freunde */
-function loadLeaderboard(){
-let board=document.getElementById("leaderboard")
-board.innerHTML=""
-let friends=JSON.parse(localStorage.getItem("studify_friends")||"[]")
-let myStreak=parseInt(localStorage.getItem("studify_streak")||0)
-friends.push({name:"Du",score:myStreak})
-friends.sort((a,b)=>b.score-a.score)
-friends.forEach(u=>{
-let div=document.createElement("div")
-div.className="leaderboard-item"
-div.innerHTML=`<span>${u.name}</span><span>🔥 ${u.score}</span>`
-board.appendChild(div)
-})
+function initMap(){ 
+  if(map) return; 
+  map=L.map('map').setView([51,10],4); 
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map); 
+  updateMapMarkers(); 
 }
 
-/* music embed */
-document.addEventListener("change",(e)=>{
-if(e.target.id==="musicSelect"){
-let url=e.target.value
-if(!url){document.getElementById("musicFrame").innerHTML=""; return;}
-document.getElementById("musicFrame").innerHTML=`<iframe width="100%" height="200" src="${url}" frameborder="0" allowfullscreen></iframe>`
-}
-})
-
-function loadFriends(){
-let list=document.getElementById("friends")
-list.innerHTML=""
-let friends=JSON.parse(localStorage.getItem("studify_friends")||"[]")
-friends.forEach(f=>{
-let div=document.createElement("div"); div.className="friend"; div.textContent=f.name; list.appendChild(div)
-})
+function updateMapMarkers(){ 
+  if(!map) return; 
+  markers.forEach(m=>map.removeLayer(m)); 
+  markers=[]; 
+  let friends=JSON.parse(localStorage.getItem("studify_friends")||"[]"); 
+  friends.forEach(f=>{ 
+    if(f.lat && f.lng){ 
+      let m=L.marker([f.lat,f.lng]).addTo(map).bindPopup(`<b>${f.name}</b><br>🔥 ${f.score} Tage`); 
+      markers.push(m); 
+    } 
+  }); 
 }
 
-<script>
-window.onload=function(){
-let name=localStorage.getItem("studify_name")
-if(name) document.getElementById("profileName").textContent=name
-loadTasks()
-increaseStreak()
-loadStats()
-loadLeaderboard()
-loadFriends()
+// ====================
+// LEADERBOARD FUNCTIONS
+// ====================
+function loadLeaderboard(){ 
+  let board=document.getElementById("leaderboard"); board.innerHTML=""; 
+  let friends=JSON.parse(localStorage.getItem("studify_friends")||"[]"); 
+  let myStreak=parseInt(localStorage.getItem("studify_streak")||0); 
+  let meName=localStorage.getItem("studify_name")||"DU";
+  if(!friends.some(f=>f.name===meName)) friends.push({name:meName,score:myStreak});
+  friends.sort((a,b)=>b.score-a.score); 
+  friends.forEach(u=>{ let div=document.createElement("div"); div.className="leaderboard-item"; div.innerHTML=`<span>${u.name}</span><span>🔥 ${u.score}</span>`; board.appendChild(div); }); 
 }
+
+// ====================
+// ROOMS FUNCTIONS
+// ====================
+function joinGroup(){ let link=prompt("Gruppenlink eingeben"); if(link) window.open(link,"_blank"); }
+function createGroup(){ let name=prompt("Gruppenname"); let link=prompt("Chat Link"); if(!name||!link)return; let div=document.createElement("div"); div.className="room"; div.textContent=name; div.onclick=()=>window.open(link,"_blank"); document.getElementById("groupList").appendChild(div); }
+
+// ====================
+// NAVIGATION FUNCTIONS
+// ====================
+function showPage(id,el){ document.querySelectorAll(".section").forEach(s=>s.style.display="none"); document.getElementById(id).style.display="block"; document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active")); el.classList.add("active"); }
+
+// ====================
+// MUSIC FUNCTIONS
+// ====================
+document.addEventListener("change",(e)=>{ if(e.target.id==="musicSelect"){ let url=e.target.value; if(!url){document.getElementById("musicFrame").innerHTML=""; return;} document.getElementById("musicFrame").innerHTML=`<iframe width="100%" height="200" src="${url}" frameborder="0" allowfullscreen></iframe>` }});
+
+// ====================
+// ONLOAD INITIALIZE
+// ====================
+window.addEventListener("load",()=>{
+  let name=localStorage.getItem("studify_name"); if(name) document.getElementById("profileName").textContent=name;
+  loadTasks(); increaseStreak(); loadStats(); loadLeaderboard(); loadFriends(); updateTimer();
+  let params=new URLSearchParams(window.location.search); if(params.has("friend")) inviteFriends();
+});
 </script>
-
-<script type="module" src="app.js"></script>
 
 </body>
 </html>
-
