@@ -408,6 +408,7 @@ let div=document.createElement("div"); div.className="friend"; div.textContent=f
 })
 }
 
+<script>
 window.onload=function(){
 let name=localStorage.getItem("studify_name")
 if(name) document.getElementById("profileName").textContent=name
@@ -417,10 +418,10 @@ loadStats()
 loadLeaderboard()
 loadFriends()
 }
+</script>
 
 <script type="module" src="app.js"></script>
 
-</script>
-
 </body>
 </html>
+
