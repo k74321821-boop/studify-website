@@ -71,6 +71,13 @@ button{cursor:pointer}
     <div id="friends"></div>
   </div>
 
+  <input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Passwort">
+
+<button onclick="login()">Login</button>
+<button onclick="register()">Registrieren</button>
+
+
   <div class="section-title" style="margin-top:20px">Study Streak</div>
   <div class="card">
     <div>Deine Lernserie</div>
@@ -306,6 +313,8 @@ window.addEventListener("load",()=>{
   loadTasks(); increaseStreak(); loadStats(); loadLeaderboard(); loadFriends(); updateTimer();
 });
 </script>
+
+<script type="module" src="app.js"></script>
 
 </body>
 </html>
