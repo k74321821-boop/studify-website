@@ -1,18 +1,34 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBlUahSYdr19cnL92HUb01G2cs2o8hh6q8",
-  authDomain: "studify-net.firebaseapp.com",
-  projectId: "studify-net",
-  storageBucket: "studify-net.firebasestorage.app",
-  messagingSenderId: "783702670387",
-  appId: "1:783702670387:web:86f0a7e2b10afc2f5b7746",
-  measurementId: "G-FDVF1WRR7G"
-};
+const supabase = createClient(
+"https://ageahamkrkgwrjzcokpv.supabase.co",
+"sb_publishable_jy1KPhJzDsgNkodh0fNASQ_ui0qt7i8"
+)
 
-// Firebase starten
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+// Registrierung
+window.register = async function(){
+let email=document.getElementById("email").value
+let password=document.getElementById("password").value
 
-console.log("Firebase geladen");
+const { error } = await supabase.auth.signUp({
+email: email,
+password: password
+})
+
+if(error) alert(error.message)
+else alert("Account erstellt")
+}
+
+// Login
+window.login = async function(){
+let email=document.getElementById("email").value
+let password=document.getElementById("password").value
+
+const { error } = await supabase.auth.signInWithPassword({
+email: email,
+password: password
+})
+
+if(error) alert(error.message)
+else alert("Login erfolgreich")
+}
